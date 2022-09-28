@@ -1,3 +1,4 @@
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
@@ -93,7 +94,7 @@ public void udprint () {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			Socket serverSocket = new Socket("192.168.2.82", 6789);//"10.10.132.175"
+			Socket serverSocket = new Socket("192.168.2.82", 6789);//"10.10.132.175" 192.168.2.82
 			DataOutputStream outputStream = new DataOutputStream(serverSocket.getOutputStream());
 
 			ChangeThread changeThread = new ChangeThread(serverSocket, this);
