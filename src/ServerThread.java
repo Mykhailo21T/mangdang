@@ -1,3 +1,4 @@
+import javax.xml.crypto.Data;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -10,10 +11,12 @@ public class ServerThread  extends Thread{
     Socket socket;
     DataOutputStream outToClient;
     String sentence = "";
+    ArrayList<Player> playerArrayList;
 
-    public ServerThread(ArrayList<Socket> clientSockets, Socket socket) throws IOException {
+    public ServerThread(ArrayList<Socket> clientSockets, Socket socket, ArrayList<Player> players) throws IOException {
         this.clientSockets = clientSockets;
         this.socket = socket;
+        this.playerArrayList = players;
     }
 
 
@@ -46,10 +49,17 @@ public class ServerThread  extends Thread{
         }
     }
     public void run() {
+
+
         try {
-        //TODO:skal sende en id ved oprettelse til klijenten
-            DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
-            dataOutputStream.writeBytes(clientSockets.size()+"\n");
+            BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            String temp = br.readLine();
+            System.out.println(temp);
+            if(temp.contains("new")){
+                DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+                out.writeBytes(temp+" "+playerArrayList.toString()+"\n");//navn og antalsockets
+            }
+
         }catch (IOException e){
             e.printStackTrace();
         }
