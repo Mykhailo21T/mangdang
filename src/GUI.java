@@ -216,9 +216,10 @@ public class GUI extends Application {
 
             // Setting up standard players
 
-            me = new Player(navnPlayer, 9, 4, "up");
+            /**me = new Player(navnPlayer, 9, 4, "up");
             players.add(me);
-            fields[9][4].setGraphic(new ImageView(hero_up));
+            fields[9][4].setGraphic(new ImageView(hero_up));*/
+
 
             scoreList.setText(getScoreList());
         } catch (Exception e) {
@@ -229,19 +230,19 @@ public class GUI extends Application {
     }
 
 
-    public void playerMoved(int delta_x, int delta_y, String direction) {
-        me.direction = direction;
-        int x = me.getXpos(), y = me.getYpos();
+    public void playerMoved(int delta_x, int delta_y, String direction,Player p) {
+        p.direction = direction;
+        int x = p.getXpos(), y = me.getYpos();
 
         if (board[y + delta_y].charAt(x + delta_x) == 'w') {
-            me.addPoints(-1);
+            p.addPoints(-1);
         } else {
-            Player p = getPlayerAt(x + delta_x, y + delta_y);
-            if (p != null) {
-                me.addPoints(10);
+            Player pL = getPlayerAt(x + delta_x, y + delta_y);
+            if (pL != null) {
+                p.addPoints(10);
                 p.addPoints(-10);
             } else {
-                me.addPoints(1);
+                p.addPoints(1);
 
                 fields[x][y].setGraphic(new ImageView(image_floor));
                 x += delta_x;
@@ -264,8 +265,8 @@ public class GUI extends Application {
                 }
                 ;
 
-                me.setXpos(x);
-                me.setYpos(y);
+                p.setXpos(x);
+                p.setYpos(y);
             }
         }
         scoreList.setText(getScoreList());
@@ -294,7 +295,7 @@ public class GUI extends Application {
         for (Player p : players) {
             int x = Integer.parseInt(movements[3]);
             int y = Integer.parseInt(movements[4]);
-            playerMoved(x, y, movements[5]);
+            playerMoved(x, y, movements[5],p);
         }
     }
 
