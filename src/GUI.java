@@ -203,18 +203,9 @@ public void udprint () {
 
 			// Setting up standard players
 
-
-
-
-
-
 			me = new Player("Me",9,4,"up");
 			players.add(me);
 			fields[14][15].setGraphic(new ImageView(hero_up));
-
-			Player Peter = new Player("Peter",13,15,"up");
-			players.add(Peter);
-			fields[13][15].setGraphic(new ImageView(hero_up));
 
 			scoreList.setText(getScoreList());
 		} catch(Exception e) {
@@ -286,6 +277,13 @@ public void udprint () {
 			int y = Integer.parseInt(movements[1]);
 			playerMoved(x,y,movements[2]);
 		}
+	}
+
+	public Player opretPlayer(String navn, int xPos, int yPos, String direction){
+		Player playerNew = new Player(navn,xPos,yPos,direction);
+		players.add(playerNew);
+		fields[xPos][yPos].setGraphic(new ImageView(hero_up));
+		return playerNew;
 	}
 
 }
