@@ -26,10 +26,11 @@ public class ChangeThread extends Thread {
             BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String strng = br.readLine();
             String[] stringSplit = strng.split(" ");
-            System.out.println(stringSplit);
-            if(stringSplit[2].isEmpty()){
+            String players = stringSplit[2];
+            System.out.println(players);
+            if(players.contentEquals("[]")){
                 Platform.runLater(() -> gui.opretPlayer(stringSplit[1],9,4,"up"));
-
+                System.out.println(gui.getPlayerAt(9, 4));
             }
             System.out.println(strng);
         } catch (IOException e) {
