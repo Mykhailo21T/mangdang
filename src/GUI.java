@@ -16,6 +16,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.*;
 
+import javax.xml.crypto.Data;
+
 public class GUI extends Application {
 
 	public static final int size = 20;
@@ -101,6 +103,8 @@ public void udprint () {
 			ChangeThread changeThread = new ChangeThread(serverSocket, this);
 			changeThread.start();
 
+			DataOutputStream outputStream1 = new DataOutputStream(serverSocket.getOutputStream());
+			outputStream1.writeBytes("antal"+"\n");
 			//---0---System.out.println(id);
 			// Skriv dit navn
 			//outputStream.writeBytes("Orville" + "\n");
@@ -156,8 +160,6 @@ public void udprint () {
 			primaryStage.setScene(scene);
 			primaryStage.show();
 
-
-
 			scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
 				switch (event.getCode()) {
 					case UP:
@@ -202,10 +204,6 @@ public void udprint () {
 			});
 
 			// Setting up standard players
-
-			me = new Player("Me",9,4,"up");
-			players.add(me);
-			fields[14][15].setGraphic(new ImageView(hero_up));
 
 			scoreList.setText(getScoreList());
 		} catch(Exception e) {
@@ -280,10 +278,14 @@ public void udprint () {
 	}
 
 	public Player opretPlayer(String navn, int xPos, int yPos, String direction){
-		Player playerNew = new Player(navn,xPos,yPos,direction);
-		players.add(playerNew);
+//		Player playerNew = new Player(navn,xPos,yPos,direction);
+//		players.add(playerNew);
+//		fields[xPos][yPos].setGraphic(new ImageView(hero_up));
+//		return playerNew;
+		me = new Player(navn,xPos,yPos,direction);
+		players.add(me);
 		fields[xPos][yPos].setGraphic(new ImageView(hero_up));
-		return playerNew;
+		return me;
 	}
 
 }
