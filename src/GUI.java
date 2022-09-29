@@ -95,7 +95,7 @@ public void udprint () {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			Socket serverSocket = new Socket("localhost", 6789);//"10.10.132.175" 192.168.2.82
+			Socket serverSocket = new Socket("10.10.139.128", 6789);//"10.10.132.175" 192.168.2.82
 			DataOutputStream outputStream = new DataOutputStream(serverSocket.getOutputStream());
 
 			ChangeThread changeThread = new ChangeThread(serverSocket, this);
