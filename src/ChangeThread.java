@@ -22,18 +22,21 @@ public class ChangeThread extends Thread {
     @Override
     public void run() {
         try {
+
             BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String strng = br.readLine();
-            Platform.runLater(() -> gui.setId(strng));
+            Platform.runLater(() -> gui.movePleyers(strng));
+            //System.out.println("jeg fik id: "+gui.getId());
+            System.out.println(strng);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println(gui.getId());
+
         while (true) {
             try {
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 String message = bufferedReader.readLine();
-
+                Platform.runLater(()->gui.movePleyers(message));
                 System.out.println(message);
             } catch (IOException e) {
                 e.printStackTrace();

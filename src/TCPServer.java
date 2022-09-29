@@ -13,10 +13,10 @@ public class TCPServer {
         while (true) {
             Socket connectionSocket = welcomSocket.accept();
             connectionsockets.add(connectionSocket);
-            System.out.println(connectionsockets);
-            (new ServerThread(connectionsockets, connectionSocket)).start();
+            (new ServerThread(connectionsockets, connectionSocket)).start();//oprettes snakke tråde til en klijent
             DataOutputStream dataOutputStream = new DataOutputStream(connectionSocket.getOutputStream());
-            dataOutputStream.writeBytes("" + n + "\n");
+//            dataOutputStream.writeBytes("id" + n + "\n");//sendes id
+//            System.out.println(connectionsockets);        //men output er forkert
             n++;
         }
     }

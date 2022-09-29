@@ -47,14 +47,15 @@ public class ServerThread  extends Thread{
     }
     public void run() {
         try {
-        outToClient = new DataOutputStream(socket.getOutputStream());
-        outToClient.writeBytes("");
+        //TODO:skal sende en id ved oprettelse til klijenten
+            DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
+            dataOutputStream.writeBytes(clientSockets.size()+"\n");
         }catch (IOException e){
             e.printStackTrace();
         }
         while (true) {
                 try {
-                    sendId(clientSockets);
+                    //sendId(clientSockets);
                     gennemgang(clientSockets);
                 } catch (IOException e) {
                     e.printStackTrace();

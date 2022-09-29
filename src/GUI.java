@@ -3,6 +3,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javafx.application.Application;
@@ -94,7 +95,7 @@ public void udprint () {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			Socket serverSocket = new Socket("192.168.2.82", 6789);//"10.10.132.175" 192.168.2.82
+			Socket serverSocket = new Socket("localhost", 6789);//"10.10.132.175" 192.168.2.82
 			DataOutputStream outputStream = new DataOutputStream(serverSocket.getOutputStream());
 
 			ChangeThread changeThread = new ChangeThread(serverSocket, this);
@@ -102,7 +103,7 @@ public void udprint () {
 
 			//---0---System.out.println(id);
 			// Skriv dit navn
-			outputStream.writeBytes("Orville" + "\n");
+			//outputStream.writeBytes("Orville" + "\n");
 
 			GridPane grid = new GridPane();
 			grid.setHgap(10);
@@ -160,36 +161,36 @@ public void udprint () {
 			scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
 				switch (event.getCode()) {
 					case UP:
-						playerMoved(0, -1, "up");
+						//playerMoved(0, -1, "up");
 						try {
-							outputStream.writeBytes("0/-1/up"+id + "\n");
+							outputStream.writeBytes("0/-1/up/"+id + "\n");
 //							System.out.println("up");
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
 						break;
 					case DOWN:
-						playerMoved(0, +1, "down");
+						//playerMoved(0, +1, "down");
 						try {
-							outputStream.writeBytes("0/+1/down"+id + "\n");
+							outputStream.writeBytes("0/+1/down/"+id + "\n");
 //							System.out.println("down");
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
 						break;
 					case LEFT:
-						playerMoved(-1, 0, "left");
+						//playerMoved(-1, 0, "left");
 						try {
-							outputStream.writeBytes("-1/0/left"+id + "\n");
+							outputStream.writeBytes("-1/0/left/"+id + "\n");
 //							System.out.println("left");
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
 						break;
 					case RIGHT:
-						playerMoved(+1, 0, "right");
+						//playerMoved(+1, 0, "right");
 						try {
-							outputStream.writeBytes("+1/0/right"+id + "\n");
+							outputStream.writeBytes("+1/0/right/"+id + "\n");
 //							System.out.println("right");
 						} catch (IOException e) {
 							e.printStackTrace();
@@ -277,7 +278,15 @@ public void udprint () {
 		return null;
 	}
 
-
+	public void movePleyers(String str){
+		String[] movements = str.split("/");
+		System.out.println(Arrays.toString(movements));
+		for(Player p : players){
+			int x = Integer.parseInt(movements[0]);
+			int y = Integer.parseInt(movements[1]);
+			playerMoved(x,y,movements[2]);
+		}
+	}
 
 }
 
