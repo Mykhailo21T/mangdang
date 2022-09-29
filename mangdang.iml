@@ -9,5 +9,6 @@
     <orderEntry type="jdk" jdkName="adopt-openj9-11" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="javafx" level="application" />
+    <orderEntry type="library" exported="" name="Java FX" level="application" />
   </component>
 </module>
