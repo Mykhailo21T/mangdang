@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ServerThread  extends Thread{
     ArrayList<Socket> clientSockets;
@@ -12,11 +14,16 @@ public class ServerThread  extends Thread{
     DataOutputStream outToClient;
     String sentence = "";
     ArrayList<Player> playerArrayList;
+    Map<String,Socket> navne = new HashMap<>();
+    Map<String,int[]> positioner = new HashMap<>();
 
-    public ServerThread(ArrayList<Socket> clientSockets, Socket socket, ArrayList<Player> players) throws IOException {
+
+    public ServerThread(ArrayList<Socket> clientSockets, Socket socket, ArrayList<Player> players, HashMap<String,Socket> navne, HashMap<String, int[]> positioner) throws IOException {
         this.clientSockets = clientSockets;
         this.socket = socket;
         this.playerArrayList = players;
+        this.positioner = positioner;
+        this.navne = navne;
     }
 
 
@@ -58,7 +65,9 @@ public class ServerThread  extends Thread{
             if(temp.contains("new")){
                 DataOutputStream out = new DataOutputStream(socket.getOutputStream());
                 out.writeBytes(temp+" "+playerArrayList.toString()+"\n");//navn og antalsockets
+
             }
+
 
         }catch (IOException e){
             e.printStackTrace();

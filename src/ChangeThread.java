@@ -29,8 +29,24 @@ public class ChangeThread extends Thread {
             String players = stringSplit[2];
             System.out.println(players);
             if(players.contentEquals("[]")){
-                Platform.runLater(() -> gui.opretPlayer(stringSplit[1],9,4,"up"));
-                System.out.println(gui.getPlayerAt(9, 4));
+                Platform.runLater(() -> {
+                    try {
+                        boolean fundet = false;
+                        for (Player p : gui.getPlayers()) {
+                            if (p.name == stringSplit[0])
+                                fundet = true;
+                        }
+                        if (fundet = false) {
+                            int xpos = Integer.parseInt(stringSplit[1]);
+                            int ypos = Integer.parseInt(stringSplit[2]);
+                                gui.opretPlayer(stringSplit[0], xpos, ypos, "up");
+                                System.out.println(gui.getPlayerAt(9, 4));
+                            }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                });
             }
             System.out.println(strng);
         } catch (IOException e) {

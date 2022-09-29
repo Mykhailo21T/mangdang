@@ -37,6 +37,10 @@ public class GUI extends Application {
 	private Label[][] fields;
 	private TextArea scoreList;
 
+	public static List<Player> getPlayers() {
+		return players;
+	}
+
 	private  String[] board = {    // 20x20
 			"wwwwwwwwwwwwwwwwwwww",
 			"w        ww        w",
@@ -168,7 +172,7 @@ public void udprint () {
 					case UP:
 						//playerMoved(0, -1, "up");
 						try {
-							outputStream.writeBytes("0/-1/up/"+id + "\n");
+							outputStream.writeBytes(me.name+"/"+ me.getXpos() +"/"+ me.getYpos()+ "0/-1/up/"+id + "\n");
 //							System.out.println("up");
 						} catch (IOException e) {
 							e.printStackTrace();
@@ -177,7 +181,7 @@ public void udprint () {
 					case DOWN:
 						//playerMoved(0, +1, "down");
 						try {
-							outputStream.writeBytes("0/+1/down/"+id + "\n");
+							outputStream.writeBytes( me.name+"/"+ me.getXpos() +"/"+ me.getYpos()+ "0/+1/down/"+id + "\n");
 //							System.out.println("down");
 						} catch (IOException e) {
 							e.printStackTrace();
@@ -186,7 +190,7 @@ public void udprint () {
 					case LEFT:
 						//playerMoved(-1, 0, "left");
 						try {
-							outputStream.writeBytes("-1/0/left/"+id + "\n");
+							outputStream.writeBytes(me.name+"/"+ me.getXpos() +"/"+ me.getYpos()+ "-1/0/left/"+id + "\n");
 //							System.out.println("left");
 						} catch (IOException e) {
 							e.printStackTrace();
@@ -195,7 +199,7 @@ public void udprint () {
 					case RIGHT:
 						//playerMoved(+1, 0, "right");
 						try {
-							outputStream.writeBytes("+1/0/right/"+id + "\n");
+							outputStream.writeBytes(me.name+"/"+ me.getXpos() +"/"+ me.getYpos()+ "/+1/0/right/"+id + "\n");
 //							System.out.println("right");
 						} catch (IOException e) {
 							e.printStackTrace();
@@ -212,7 +216,17 @@ public void udprint () {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+
+		me= new Player("Orville", 9,4,"up");
+		players.add(me);
+		fields[9][4].setGraphic(new ImageView(hero_up));
+
+
+
 	}
+
+
+
 
 	public void playerMoved(int delta_x, int delta_y, String direction) {
 		me.direction = direction;
@@ -280,11 +294,13 @@ public void udprint () {
 		}
 	}
 
-	public Player opretPlayer(String navn, int xPos, int yPos, String direction){
+	public Player opretPlayer(String navn, int xPos, int yPos, String direction) throws IOException {
 
 		me = new Player(navn,xPos,yPos,direction);
 		players.add(me);
 		fields[xPos][yPos].setGraphic(new ImageView(hero_up));
+		DataOutputStream send = new DataOutputStream(serverSocket.getOutputStream());
+		send.writeBytes( navn +" "+ xPos + " " + yPos +" "+ direction + "\n");
 		return me;
 	}
 
