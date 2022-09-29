@@ -1,5 +1,8 @@
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -287,9 +290,7 @@ public void udprint () {
 		players.add(me);
 		fields[xPos][yPos].setGraphic(new ImageView(hero_up));
 		return me;
-
 	}
-
 
 }
 
