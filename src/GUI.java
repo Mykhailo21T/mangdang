@@ -21,6 +21,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GUI extends Application {
 
@@ -79,10 +80,6 @@ public class GUI extends Application {
     int[] position3 = {2, 15};
     int[] position;
 
-    public void udprint() {
-        System.out.println("123");
-    }
-
     /**
      * public void opretSpiller(String navn, int id) {
      * if(id==1) {
@@ -108,16 +105,17 @@ public class GUI extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            serverSocket = new Socket("10.10.139.128", 6789);//"10.10.139.128" 192.168.2.82
+            serverSocket = new Socket("localhost", 6789);//"10.10.139.128" 192.168.2.82
             DataOutputStream outputStream = new DataOutputStream(serverSocket.getOutputStream());
 
             ChangeThread changeThread = new ChangeThread(serverSocket, this);
             changeThread.start();
 
+            System.out.println("Skriv dit navn:");
             BufferedReader brNavn = new BufferedReader(new InputStreamReader(System.in));
             String navnPlayer = brNavn.readLine();
-            DataOutputStream outputStream1 = new DataOutputStream(serverSocket.getOutputStream());
-            outputStream1.writeBytes("new " + navnPlayer + "\n");
+//            DataOutputStream outputStream1 = new DataOutputStream(serverSocket.getOutputStream());
+//            outputStream1.writeBytes(navnPlayer + "\n");
 
 
             GridPane grid = new GridPane();
@@ -174,37 +172,37 @@ public class GUI extends Application {
             scene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
                 switch (event.getCode()) {
                     case UP:
-                        //playerMoved(0, -1, "up");
+
                         try {
                             outputStream.writeBytes(me.name + "/" + me.getXpos() + "/" + me.getYpos() + "/0/-1/up/" + getScoreList() + "\n");
-//							System.out.println("up");
+
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                         break;
                     case DOWN:
-                        //playerMoved(0, +1, "down");
+
                         try {
-                            outputStream.writeBytes(me.name + "/" + me.getXpos() + "/" + me.getYpos() + "/0/+1/down/" + getScoreList()+ "\n");
-//							System.out.println("down");
+                            outputStream.writeBytes(me.name + "/" + me.getXpos() + "/" + me.getYpos() + "/0/+1/down/" + getScoreList() + "\n");
+
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                         break;
                     case LEFT:
-                        //playerMoved(-1, 0, "left");
+
                         try {
-                            outputStream.writeBytes(me.name + "/" + me.getXpos() + "/" + me.getYpos() + "/-1/0/left/" + getScoreList()+ "\n");
-//							System.out.println("left");
+                            outputStream.writeBytes(me.name + "/" + me.getXpos() + "/" + me.getYpos() + "/-1/0/left/" + getScoreList() + "\n");
+
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                         break;
                     case RIGHT:
-                        //playerMoved(+1, 0, "right");
+
                         try {
-                            outputStream.writeBytes(me.name + "/" + me.getXpos() + "/" + me.getYpos() + "/+1/0/right/" + getScoreList()+ "\n");
-//							System.out.println("right");
+                            outputStream.writeBytes(me.name + "/" + me.getXpos() + "/" + me.getYpos() + "/+1/0/right/" + getScoreList() + "\n");
+
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -216,23 +214,22 @@ public class GUI extends Application {
 
             // Setting up standard players
 
-            /**me = new Player(navnPlayer, 9, 4, "up");
-            players.add(me);
-            fields[9][4].setGraphic(new ImageView(hero_up));*/
+            me = new Player(navnPlayer, 9, 4, "up");    //hvert spiller opretter sig ved indtast
+            players.add(me);                                                //af sit navn
+            fields[9][4].setGraphic(new ImageView(hero_up));
+            System.out.printf("player %s created%n",me.name);
 
 
             scoreList.setText(getScoreList());
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 
 
-    public void playerMoved(int delta_x, int delta_y, String direction,Player p) {
+    public void playerMoved(int delta_x, int delta_y, String direction, Player p) {
         p.direction = direction;
-        int x = p.getXpos(), y = me.getYpos();
+        int x = p.getXpos(), y = p.getYpos();
 
         if (board[y + delta_y].charAt(x + delta_x) == 'w') {
             p.addPoints(-1);
@@ -289,29 +286,21 @@ public class GUI extends Application {
         return null;
     }
 
-    public void movePleyers(String str) {
-        String[] movements = str.split("/");
-        System.out.println(Arrays.toString(movements));
+    public void movePleyers(String str,int deltaX, int deltaY,String direktion) {
         for (Player p : players) {
-            int x = Integer.parseInt(movements[3]);
-            int y = Integer.parseInt(movements[4]);
-            playerMoved(x, y, movements[5],p);
+            if (p.name.equals(str)) {
+//                int x = Integer.parseInt(movements[3]);
+//                int y = Integer.parseInt(movements[4]);
+                playerMoved(deltaX, deltaY, direktion, p);
+            }
         }
     }
 
-    public Player opretPlayer(String navn, int xPos, int yPos, String direction) throws IOException {
+    public void opretPlayer(String navn, int xPos, int yPos, String direction) throws IOException {
 
-        me = new Player(navn, xPos, yPos, direction);
-        players.add(me);
+        Player player = new Player(navn, xPos, yPos, direction);
+        players.add(player);
         fields[xPos][yPos].setGraphic(new ImageView(hero_up));
-        DataOutputStream send = new DataOutputStream(serverSocket.getOutputStream());
-        send.writeBytes(navn + " " + xPos + " " + yPos + " " + direction + "\n");
-        return me;
     }
 
 }
-
-//		Player playerNew = new Player(navn,xPos,yPos,direction);
-//		players.add(playerNew);
-//		fields[xPos][yPos].setGraphic(new ImageView(hero_up));
-//		return playerNew;

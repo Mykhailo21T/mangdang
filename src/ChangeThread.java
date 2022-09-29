@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Locale;
 
 public class ChangeThread extends Thread {
     Socket socket;
@@ -21,57 +23,57 @@ public class ChangeThread extends Thread {
 
     @Override
     public void run() {
-        try {
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            String strng = br.readLine();
-            String[] stringSplit = strng.split(" ");
-            String players = stringSplit[2];
-            System.out.println(players);
-            if(players.contentEquals("[]")){
-                Platform.runLater(() -> {
-                    try {
-                        boolean fundet = false;
-                        for (Player p : gui.getPlayers()) {
-                            if (p.name == stringSplit[0])
-                                fundet = true;
-                        }
-                        if (fundet = false) {
-                            int xpos = Integer.parseInt(stringSplit[1]);
-                            int ypos = Integer.parseInt(stringSplit[2]);
-                                gui.opretPlayer(stringSplit[0], xpos, ypos, "up");
-                                System.out.println(gui.getPlayerAt(9, 4));
-                            }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                });
-            }
-            System.out.println(strng);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         while (true) {
             try {
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 String message = bufferedReader.readLine();
-                Platform.runLater(()->gui.movePleyers(message));
-                System.out.println(message);
+                String[] stringSplittet = message.split("/");
+                Platform.runLater(() -> {
+                    if (!findPlayer(stringSplittet[0])) {
+                        try {
+                            gui.opretPlayer(stringSplittet[0], 9, 4, "up");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    gui.movePleyers(stringSplittet[0],Integer.parseInt(stringSplittet[3]),Integer.parseInt(stringSplittet[4]),stringSplittet[5]);
+                });
+                //System.out.println(message);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
+
+    private boolean findPlayer(String str) {
+
+        for (Player p : gui.getPlayers()) {
+            if (p.name.equals(str)) {
+                return true; //break;
+            }
+        }
+        return false;
+    }
 }
 
-//Platform.runLater(() -> {
-//                   if(gui.getId()==0){
-//                       System.out.println("hejsa");
-//                       System.out.println(message);
-//                       gui.setId(message);
-//                   }else {
-//                       gui.opretSpiller(message, id);
-//                   }
-// });
+//TODO: at spiller skal kunne bevege sig selv ud af besked navn
+
+
+/**
+ * try {
+ * boolean fundet = false;
+ * for (Player p : gui.getPlayers()) {
+ * if (p.name == stringSplit[0])
+ * fundet = true;
+ * }
+ * if (fundet = false) {
+ * int xpos = Integer.parseInt(stringSplit[1]);
+ * int ypos = Integer.parseInt(stringSplit[2]);
+ * gui.opretPlayer(stringSplit[0], xpos, ypos, "up");
+ * System.out.println(gui.getPlayerAt(9, 4));
+ * }
+ * } catch (IOException e) {
+ * e.printStackTrace();
+ * }
+ */

@@ -30,7 +30,6 @@ public class ServerThread  extends Thread{
     public synchronized void gennemgang(ArrayList<Socket> sockets) throws IOException {
         BufferedReader buffer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         sentence = buffer.readLine();
-        System.out.println(socket.getInetAddress());
         for (Socket s : sockets) {
             try {
                 outToClient = new DataOutputStream(s.getOutputStream());
@@ -57,31 +56,15 @@ public class ServerThread  extends Thread{
     }
     public void run() {
 
-
-        try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            String temp = br.readLine();
-            System.out.println(temp);
-            if(temp.contains("new")){
-                DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-                out.writeBytes(temp+" "+playerArrayList.toString()+"\n");//navn og antalsockets
-
-            }
-
-
-        }catch (IOException e){
-            e.printStackTrace();
-        }
         while (true) {
-                try {
-                    //sendId(clientSockets);
-                    gennemgang(clientSockets);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            try {
+                gennemgang(clientSockets);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-
         }
+
+    }
     }
 
 
