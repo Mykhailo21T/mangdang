@@ -99,7 +99,7 @@ public void udprint () {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			Socket serverSocket = new Socket("localhost", 6789);//"10.10.132.175" 192.168.2.82
+			Socket serverSocket = new Socket("localhost", 6789);//"10.10.139.128" 192.168.2.82
 			DataOutputStream outputStream = new DataOutputStream(serverSocket.getOutputStream());
 
 			ChangeThread changeThread = new ChangeThread(serverSocket, this);
@@ -109,9 +109,6 @@ public void udprint () {
 			String navnPlayer = brNavn.readLine();
 			DataOutputStream outputStream1 = new DataOutputStream(serverSocket.getOutputStream());
 			outputStream1.writeBytes("new "+navnPlayer+"\n");
-			//---0---System.out.println(id);
-			// Skriv dit navn
-			//outputStream.writeBytes("Orville" + "\n");
 
 			GridPane grid = new GridPane();
 			grid.setHgap(10);
@@ -282,10 +279,7 @@ public void udprint () {
 	}
 
 	public Player opretPlayer(String navn, int xPos, int yPos, String direction){
-//		Player playerNew = new Player(navn,xPos,yPos,direction);
-//		players.add(playerNew);
-//		fields[xPos][yPos].setGraphic(new ImageView(hero_up));
-//		return playerNew;
+
 		me = new Player(navn,xPos,yPos,direction);
 		players.add(me);
 		fields[xPos][yPos].setGraphic(new ImageView(hero_up));
@@ -294,3 +288,7 @@ public void udprint () {
 
 }
 
+//		Player playerNew = new Player(navn,xPos,yPos,direction);
+//		players.add(playerNew);
+//		fields[xPos][yPos].setGraphic(new ImageView(hero_up));
+//		return playerNew;
