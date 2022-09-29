@@ -49,13 +49,15 @@ public class ServerThread  extends Thread{
         }
     }
     public void run() {
+
+
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String temp = br.readLine();
             System.out.println(temp);
-            if(temp == "antal"){
+            if(temp.contains("new")){
                 DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-                out.writeBytes(""+playerArrayList.toString()+"\n");
+                out.writeBytes(temp+" "+playerArrayList.toString()+"\n");//navn og antalsockets
             }
 
         }catch (IOException e){

@@ -25,8 +25,12 @@ public class ChangeThread extends Thread {
 
             BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String strng = br.readLine();
-            Platform.runLater(() -> gui.movePleyers(strng));
-            //System.out.println("jeg fik id: "+gui.getId());
+            String[] stringSplit = strng.split(" ");
+            System.out.println(stringSplit);
+            if(stringSplit[2].isEmpty()){
+                Platform.runLater(() -> gui.opretPlayer(stringSplit[1],9,4,"up"));
+
+            }
             System.out.println(strng);
         } catch (IOException e) {
             e.printStackTrace();
