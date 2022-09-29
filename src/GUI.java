@@ -33,7 +33,7 @@ public class GUI extends Application {
 
 	public static Player me;
 	public static List<Player> players = new ArrayList<Player>();
-
+	private Socket serverSocket;
 	private Label[][] fields;
 	private TextArea scoreList;
 
@@ -99,7 +99,7 @@ public void udprint () {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			Socket serverSocket = new Socket("localhost", 6789);//"10.10.139.128" 192.168.2.82
+			serverSocket = new Socket("localhost", 6789);//"10.10.139.128" 192.168.2.82
 			DataOutputStream outputStream = new DataOutputStream(serverSocket.getOutputStream());
 
 			ChangeThread changeThread = new ChangeThread(serverSocket, this);
@@ -109,6 +109,8 @@ public void udprint () {
 			String navnPlayer = brNavn.readLine();
 			DataOutputStream outputStream1 = new DataOutputStream(serverSocket.getOutputStream());
 			outputStream1.writeBytes("new "+navnPlayer+"\n");
+
+
 
 			GridPane grid = new GridPane();
 			grid.setHgap(10);
