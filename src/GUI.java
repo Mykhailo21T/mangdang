@@ -218,7 +218,7 @@ public class GUI extends Application {
             e.printStackTrace();
         }
     }
-
+    //
     public void playerMoved(int delta_x, int delta_y, String direction, Player p) {
         p.direction = direction;
         int x = p.getXpos(), y = p.getYpos();
