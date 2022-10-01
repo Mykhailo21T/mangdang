@@ -37,7 +37,9 @@ public class ChangeThread extends Thread {
                             e.printStackTrace();
                         }
                     }
+                    System.out.println(Arrays.toString(stringSplittet));
                     gui.movePleyers(stringSplittet[0],Integer.parseInt(stringSplittet[3]),Integer.parseInt(stringSplittet[4]),stringSplittet[5]);
+
                 });
                 //System.out.println(message);
             } catch (IOException e) {

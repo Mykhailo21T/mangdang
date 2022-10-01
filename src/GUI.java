@@ -158,7 +158,7 @@ public class GUI extends Application {
                 }
             }
             scoreList.setEditable(false);
-
+            //
 
             grid.add(mazeLabel, 0, 0);
             grid.add(scoreLabel, 1, 0);
@@ -174,7 +174,7 @@ public class GUI extends Application {
                     case UP:
 
                         try {
-                            outputStream.writeBytes(me.name + "/" + me.getXpos() + "/" + me.getYpos() + "/0/-1/up/" + getScoreList() + "\n");
+                            outputStream.writeBytes(me.name + "/" + me.getXpos() + "/" + me.getYpos() + "/0/-1/up/" + "\n");//"\n" var fjernet for at undgå fordobling
 
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -183,7 +183,7 @@ public class GUI extends Application {
                     case DOWN:
 
                         try {
-                            outputStream.writeBytes(me.name + "/" + me.getXpos() + "/" + me.getYpos() + "/0/+1/down/" + getScoreList() + "\n");
+                            outputStream.writeBytes(me.name + "/" + me.getXpos() + "/" + me.getYpos() + "/0/+1/down/" +"\n");//"\n" var fjernet for at undgå fordobling
 
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -192,7 +192,7 @@ public class GUI extends Application {
                     case LEFT:
 
                         try {
-                            outputStream.writeBytes(me.name + "/" + me.getXpos() + "/" + me.getYpos() + "/-1/0/left/" + getScoreList() + "\n");
+                            outputStream.writeBytes(me.name + "/" + me.getXpos() + "/" + me.getYpos() + "/-1/0/left/" + "\n");//"\n" var fjernet for at undgå fordobling
 
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -201,7 +201,7 @@ public class GUI extends Application {
                     case RIGHT:
 
                         try {
-                            outputStream.writeBytes(me.name + "/" + me.getXpos() + "/" + me.getYpos() + "/+1/0/right/" + getScoreList() + "\n");
+                            outputStream.writeBytes(me.name + "/" + me.getXpos() + "/" + me.getYpos() + "/+1/0/right/" + "\n");//"\n" var fjernet for at undgå fordobling
 
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -214,10 +214,11 @@ public class GUI extends Application {
 
             // Setting up standard players
 
-            me = new Player(navnPlayer, 9, 4, "up");    //hvert spiller opretter sig ved indtast
-            players.add(me);                                                //af sit navn
-            fields[9][4].setGraphic(new ImageView(hero_up));
-            System.out.printf("player %s created%n",me.name);
+            opretPlayer(navnPlayer, 9, 4, "up");
+//            me = new Player(navnPlayer, 9, 4, "up");    //hvert spiller opretter sig ved indtast
+//            players.add(me);                                                //af sit navn
+//            fields[9][4].setGraphic(new ImageView(hero_up));
+//            System.out.printf("player %s created%n",me.name);
 
 
             scoreList.setText(getScoreList());
@@ -272,7 +273,8 @@ public class GUI extends Application {
     public String getScoreList() {
         StringBuffer b = new StringBuffer(100);
         for (Player p : players) {
-            b.append(p + "\r\n");
+            b.append(p + "\r\n");// fejl ved output som created ny spiller
+
         }
         return b.toString();
     }
@@ -298,9 +300,18 @@ public class GUI extends Application {
 
     public void opretPlayer(String navn, int xPos, int yPos, String direction) throws IOException {
 
-        Player player = new Player(navn, xPos, yPos, direction);
-        players.add(player);
-        fields[xPos][yPos].setGraphic(new ImageView(hero_up));
+        if(me==null){
+            me = new Player(navn, 9, 4, "up");
+            players.add(me);
+            fields[9][4].setGraphic(new ImageView(hero_up));
+            System.out.printf("player %s created as me\n",navn);
+        }else {
+            Player player = new Player(navn, xPos, yPos, direction);
+            players.add(player);
+            fields[xPos][yPos].setGraphic(new ImageView(hero_up));
+//            System.out.println(navn + xPos + yPos + direction);
+            System.out.printf("player %s created\n",navn);
+        }
     }
 
 }
