@@ -158,7 +158,7 @@ public class GUI extends Application {
                 }
             }
             scoreList.setEditable(false);
-            //
+            ///
 
             grid.add(mazeLabel, 0, 0);
             grid.add(scoreLabel, 1, 0);
