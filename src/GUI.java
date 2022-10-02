@@ -204,6 +204,14 @@ public class GUI extends Application {
                             e.printStackTrace();
                         }
                         break;
+                    case SPACE:
+                        try {
+                            skyd();
+                        }
+                        catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        break;
                     default:
                         break;
                 }
@@ -219,9 +227,48 @@ public class GUI extends Application {
         }
     }
 
-    public void playerMoved(int delta_x, int delta_y, String direction, Player p) {
+    private void skyd() throws IOException {
+        String retning = me.direction;
+        int tempPosX = me.getXpos();
+        int tempPosY = me.getYpos();
+        int nyX =(int)(Math.random()*18)+1;
+        int nyY=(int)(Math.random()*18)+1;
+        for (Player p : players){
+            if(p!=me && retning.equals("up") && p.xpos==tempPosX && p.ypos>tempPosY){
+                p.setXpos(nyX);
+                p.setYpos(nyY);
+                DataOutputStream outputStream = new DataOutputStream(serverSocket.getOutputStream());
+                outputStream.writeBytes(p.name + "/" + nyX + "/" + nyY + "/0/0/down/" + "\n");
+                System.out.println(p.name);
+            }else if (p!=me && retning.equals("right") && p.xpos>tempPosX && p.ypos==tempPosY){
+                p.setXpos(nyX);
+                p.setYpos(nyY);
+                DataOutputStream outputStream = new DataOutputStream(serverSocket.getOutputStream());
+                outputStream.writeBytes(p.name + "/" + nyX + "/" + nyY + "/0/0/down/" + "\n");
+                System.out.println(p.name);
+            }else if (p!=me && retning.equals("down") && p.xpos==tempPosX && p.ypos<tempPosY){
+                p.setXpos(nyX);
+                p.setYpos(nyY);
+                DataOutputStream outputStream = new DataOutputStream(serverSocket.getOutputStream());
+                outputStream.writeBytes(p.name + "/" + nyX + "/" + nyY + "/0/0/down/" + "\n");
+                System.out.println(p.name);
+            }else if (p!=me && retning.equals("left") && p.xpos<tempPosX && p.ypos==tempPosY){
+                p.setXpos(nyX);
+                p.setYpos(nyY);
+                DataOutputStream outputStream = new DataOutputStream(serverSocket.getOutputStream());
+                outputStream.writeBytes(p.name + "/" + nyX + "/" + nyY + "/0/0/down/" + "\n");
+                System.out.println(p.name);
+            }
+        }
+    }
+    /**
+     * public void playerMoved(int delta_x, int delta_y, String direction, Player p) {
+     * tilføjet xx og yy coordinater som sendes nu også i beskedet og som skal ikke længere bruges fra p.getx og p.gety
+     * */
+
+    public void playerMoved(int xX,int yY,int delta_x, int delta_y, String direction, Player p) {
         p.direction = direction;
-        int x = p.getXpos(), y = p.getYpos();
+        int x = xX, y = yY;
 
         if (board[y + delta_y].charAt(x + delta_x) == 'w') {
             p.addPoints(-1);
@@ -280,10 +327,10 @@ public class GUI extends Application {
         return null;
     }
 
-    public void movePleyers(String str, int deltaX, int deltaY, String direktion) {
+    public void movePleyers(int xX,int yY,String str, int deltaX, int deltaY, String direktion) {
         for (Player p : players) {
             if (p.name.equals(str)) {
-                playerMoved(deltaX, deltaY, direktion, p);
+                playerMoved(xX,yY,deltaX, deltaY, direktion, p);
             }
         }
     }
@@ -304,3 +351,10 @@ public class GUI extends Application {
     }
 
 }
+/**
+ * add case shoot
+ * add methode shoot
+ *      -take direction
+ *      -shooted player will respawn in random position with reseted scores
+ *
+ */

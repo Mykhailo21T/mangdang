@@ -38,7 +38,8 @@ public class ChangeThread extends Thread {
                         }
                     }
                     System.out.println(Arrays.toString(stringSplittet));
-                    gui.movePleyers(stringSplittet[0],Integer.parseInt(stringSplittet[3]),Integer.parseInt(stringSplittet[4]),stringSplittet[5]);
+                    gui.movePleyers(Integer.parseInt(stringSplittet[1]),Integer.parseInt(stringSplittet[2]),
+                            stringSplittet[0],Integer.parseInt(stringSplittet[3]),Integer.parseInt(stringSplittet[4]),stringSplittet[5]);
 
                 });
                 //System.out.println(message);
