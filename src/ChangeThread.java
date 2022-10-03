@@ -32,7 +32,7 @@ public class ChangeThread extends Thread {
                 Platform.runLater(() -> {
                     if (!findPlayer(stringSplittet[0])) {
                         try {
-                            gui.opretPlayer(stringSplittet[0], 9, 4, "up");
+                            gui.opretPlayer(stringSplittet[0], Integer.parseInt(stringSplittet[1]), Integer.parseInt(stringSplittet[2]), "up");
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -40,7 +40,7 @@ public class ChangeThread extends Thread {
                     System.out.println(Arrays.toString(stringSplittet));
                     gui.movePleyers(Integer.parseInt(stringSplittet[1]),Integer.parseInt(stringSplittet[2]),
                             stringSplittet[0],Integer.parseInt(stringSplittet[3]),Integer.parseInt(stringSplittet[4]),stringSplittet[5]);
-
+                    /** posX,posY,navn,n,n,direktion */
                 });
                 //System.out.println(message);
             } catch (IOException e) {
@@ -79,4 +79,8 @@ public class ChangeThread extends Thread {
  * } catch (IOException e) {
  * e.printStackTrace();
  * }
+ *
+ * hvis personens x og y koordinater stoerre and 1 forskel
+ * saa den gamle position skal aendres med gulvet
+ *
  */
