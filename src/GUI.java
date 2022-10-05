@@ -349,4 +349,8 @@ public class GUI extends Application {
         fields[randX][randY].setGraphic(new ImageView(hero_up));
         System.out.printf("player %s created as me\n", navn);
     }
+
+    public int getAntalPlayers(){
+        return players.size();
+    }
 }

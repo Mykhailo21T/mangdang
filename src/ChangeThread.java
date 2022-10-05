@@ -47,7 +47,7 @@ public class ChangeThread extends Thread {
             String message = bufferedReader.readLine();
             String[] stringSplittet = message.split("/");
             Platform.runLater(() -> {
-                if (!findPlayer(stringSplittet[0])&&stringSplittet[0].trim().length()>0 && gui.getScoreList().length()<3) {//new player som er lige joinet oprettes
+                if (!findPlayer(stringSplittet[0])&&stringSplittet[0].trim().length()>0 && gui.getAntalPlayers()<3) {//new player som er lige joinet oprettes
                     try {
                         gui.opretPlayer(stringSplittet[0], Integer.parseInt(stringSplittet[1]), Integer.parseInt(stringSplittet[2]), "up");
                     } catch (IOException e) {
