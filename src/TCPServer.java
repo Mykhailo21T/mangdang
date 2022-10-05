@@ -16,12 +16,11 @@ public class TCPServer {
         ArrayList<Player> players = new ArrayList<>();
         HashMap<String, Socket> navne = new HashMap<>();
         HashMap<String, int[]> positioner = new HashMap<>();
-        int n = 0;
+
         while (true) {
             Socket connectionSocket = welcomSocket.accept();
             connectionsockets.add(connectionSocket);
             (new ServerThread(connectionsockets, connectionSocket, players, navne, positioner)).start();//oprettes snakke tråde til en klijent
-            System.out.println(n++);
         }
     }
 }

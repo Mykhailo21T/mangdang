@@ -30,7 +30,7 @@ public class ServerThread extends Thread {
     public synchronized void gennemgang(ArrayList<Socket> sockets) throws IOException {
         BufferedReader buffer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         String sentence = buffer.readLine();
-        if(!sentence.trim().equals("")) { //ingen tom string (der var nogle gang tom string som er kommet)
+        //if(!sentence.trim().equals("")) { //ingen tom string (der var nogle gang tom string som er kommet)
             for (Socket s : sockets) {
                 try {
                     outToClient = new DataOutputStream(s.getOutputStream());
@@ -41,7 +41,7 @@ public class ServerThread extends Thread {
                     e.printStackTrace();
                 }
             }
-        }
+       // }
     }
 
     public void run() {

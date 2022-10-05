@@ -19,9 +19,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class GUI extends Application {
 
@@ -80,20 +78,6 @@ public class GUI extends Application {
     int[] position3 = {2, 15};
     int[] position;
 
-    /**
-     * public void opretSpiller(String navn, int id) {
-     * if(id==1) {
-     * position = position1;
-     * } else if (id==2){
-     * position=position2;
-     * } else
-     * position=position3;
-     * me = new Player(navn, position[0], position[1], "up");
-     * players.add(me);
-     * fields[position[0]][position[1]].setGraphic(new ImageView(hero_up));
-     * }
-     */
-
     public void setId(String message) {
         id = Integer.parseInt(message);
     }
@@ -105,7 +89,7 @@ public class GUI extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            serverSocket = new Socket("localhost", 6789);//"10.10.139.128" 192.168.2.82
+            serverSocket = new Socket("10.10.139.53", 6789);//"10.10.139.128" 192.168.2.82
             DataOutputStream outputStream = new DataOutputStream(serverSocket.getOutputStream());
 
             ChangeThread changeThread = new ChangeThread(serverSocket, this);
@@ -208,8 +192,7 @@ public class GUI extends Application {
 
                         try {
                             skyd();
-                        }
-                        catch (IOException e) {
+                        } catch (IOException e) {
                             e.printStackTrace();
                         }
                         break;
@@ -232,52 +215,55 @@ public class GUI extends Application {
         String retning = me.direction;
         int tempPosX = me.getXpos();
         int tempPosY = me.getYpos();
-        int nyX =(int)(Math.random()*18)+1;
-        int nyY=(int)(Math.random()*18)+1;
-        for (Player p : players){
-            if(p!=me && retning.equals("up") && p.xpos==tempPosX && p.ypos<tempPosY){
+        int nyX = (int) (Math.random() * 18) + 1;
+        int nyY = (int) (Math.random() * 18) + 1;
+        for (Player p : players) {
+            if (p != me && retning.equals("up") && p.xpos == tempPosX && p.ypos < tempPosY) {
                 fields[p.getXpos()][p.getYpos()].setGraphic(new ImageView(image_floor));
                 p.setXpos(nyX);
                 p.setYpos(nyY);
                 DataOutputStream outputStream = new DataOutputStream(serverSocket.getOutputStream());
                 outputStream.writeBytes(p.name + "/" + nyX + "/" + nyY + "/0/0/down/" + "\n");
-                System.out.printf("%s skydet",p.name);
-            }else if (p!=me && retning.equals("right") && p.xpos>tempPosX && p.ypos==tempPosY){
+                System.out.printf("%s skydet", p.name);
+            } else if (p != me && retning.equals("right") && p.xpos > tempPosX && p.ypos == tempPosY) {
                 fields[p.getXpos()][p.getYpos()].setGraphic(new ImageView(image_floor));
                 p.setXpos(nyX);
                 p.setYpos(nyY);
                 DataOutputStream outputStream = new DataOutputStream(serverSocket.getOutputStream());
                 outputStream.writeBytes(p.name + "/" + nyX + "/" + nyY + "/0/0/down/" + "\n");
-                System.out.printf("%s skydet",p.name);
-            }else if (p!=me && retning.equals("down") && p.xpos==tempPosX && p.ypos>tempPosY){
+                System.out.printf("%s skydet", p.name);
+            } else if (p != me && retning.equals("down") && p.xpos == tempPosX && p.ypos > tempPosY) {
                 fields[p.getXpos()][p.getYpos()].setGraphic(new ImageView(image_floor));
                 p.setXpos(nyX);
                 p.setYpos(nyY);
                 DataOutputStream outputStream = new DataOutputStream(serverSocket.getOutputStream());
                 outputStream.writeBytes(p.name + "/" + nyX + "/" + nyY + "/0/0/down/" + "\n");
-                System.out.printf("%s skydet",p.name);
-            }else if (p!=me && retning.equals("left") && p.xpos>tempPosX && p.ypos==tempPosY){
+                System.out.printf("%s skydet", p.name);
+            } else if (p != me && retning.equals("left") && p.xpos > tempPosX && p.ypos == tempPosY) {
                 fields[p.getXpos()][p.getYpos()].setGraphic(new ImageView(image_floor));
                 p.setXpos(nyX);
                 p.setYpos(nyY);
                 DataOutputStream outputStream = new DataOutputStream(serverSocket.getOutputStream());
                 outputStream.writeBytes(p.name + "/" + nyX + "/" + nyY + "/0/0/down/" + "\n");
-                System.out.printf("%s skydet",p.name);
+                System.out.printf("%s skydet", p.name);
             }
         }
     }
+
     /**
      * public void playerMoved(int delta_x, int delta_y, String direction, Player p) {
      * tilføjet xx og yy coordinater som sendes nu også i beskedet og som skal ikke længere bruges fra p.getx og p.gety
-     * */
+     */
 
-    public void playerMoved(int xX,int yY,int delta_x, int delta_y, String direction, Player p) {
+    public void playerMoved(int xX, int yY, int delta_x, int delta_y, String direction, Player p) {
 
-        int checkX = Math.abs(p.getXpos()-xX);
-        int checkY = Math.abs(p.getYpos()-yY);
-        if(Math.max(checkX, checkY)>1){
+        int checkX = Math.abs(p.getXpos() - xX);
+        int checkY = Math.abs(p.getYpos() - yY);
+        if (Math.max(checkX, checkY) > 1) {
             fields[p.getXpos()][p.getYpos()].setGraphic(new ImageView(image_floor));
-        } /** overstående er tjekker hvis player skydeSpawnet og fjerne den gamle billede fra bordet*/
+        }
+        /** overstående er tjekker hvis player skydeSpawnet og fjerne den gamle billede fra bordet*/
+
         p.direction = direction;
         int x = xX, y = yY;
 
@@ -338,26 +324,26 @@ public class GUI extends Application {
         return null;
     }
 
-    public void movePleyers(int xX,int yY,String str, int deltaX, int deltaY, String direktion) {
+    public void movePleyers(int xX, int yY, String str, int deltaX, int deltaY, String direktion) {
         for (Player p : players) {
             if (p.name.equals(str)) {
-                playerMoved(xX,yY,deltaX, deltaY, direktion, p);
+                playerMoved(xX, yY, deltaX, deltaY, direktion, p);
             }
         }
     }
 
     public void opretPlayer(String navn, int xPos, int yPos, String direction) throws IOException {
 
-            Player player = new Player(navn, xPos, yPos, direction);
-            players.add(player);
-            fields[xPos][yPos].setGraphic(new ImageView(hero_up));
-            System.out.printf("player %s created\n", navn);
+        Player player = new Player(navn, xPos, yPos, direction);
+        players.add(player);
+        fields[xPos][yPos].setGraphic(new ImageView(hero_up));
+        System.out.printf("player %s created\n", navn);
 
     }
 
-    public void opretMe(String navn){
-        int randX = (int) (Math.random()*18)+1;
-        int randY = (int) (Math.random()*18)+1;
+    public void opretMe(String navn) {
+        int randX = (int) (Math.random() * 18) + 1;
+        int randY = (int) (Math.random() * 18) + 1;
         me = new Player(navn, randX, randY, "up");
         players.add(me);
         fields[randX][randY].setGraphic(new ImageView(hero_up));
