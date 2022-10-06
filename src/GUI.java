@@ -89,7 +89,7 @@ public class GUI extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            serverSocket = new Socket("192.168.2.82", 6789);
+            serverSocket = new Socket("localhost", 6789);
              outputStream = new DataOutputStream(serverSocket.getOutputStream());
 
             ChangeThread changeThread = new ChangeThread(serverSocket, this);
@@ -333,13 +333,6 @@ public class GUI extends Application {
     public int getAntalPlayers(){
         return players.size();
     }
-
-    /**
-     * @param p player som står i den retning hvor man skyder
-     * @param nyXPos dens ny x position på brettet
-     * @param nyYPos dens ny y position på brettet
-     * @throws IOException
-     */
 
     private void randomSpawn(Player p, int nyXPos,int nyYPos) throws IOException{
         if(board[nyXPos].charAt(nyYPos)!='w') { //skal sikre at væggerne bliver ikke fjernet
