@@ -89,7 +89,7 @@ public class GUI extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            serverSocket = new Socket("10.10.139.53", 6789);//"10.10.139.128" 192.168.2.82
+            serverSocket = new Socket("10.10.139.56", 6789);//"10.10.139.128" 192.168.2.82
             DataOutputStream outputStream = new DataOutputStream(serverSocket.getOutputStream());
 
             ChangeThread changeThread = new ChangeThread(serverSocket, this);
@@ -211,7 +211,7 @@ public class GUI extends Application {
         }
     }
 
-    private void skyd() throws IOException {
+    private void skyd()  throws IOException{
         String retning = me.direction;
         int tempPosX = me.getXpos();
         int tempPosY = me.getYpos();
@@ -219,33 +219,13 @@ public class GUI extends Application {
         int nyY = (int) (Math.random() * 18) + 1;
         for (Player p : players) {
             if (p != me && retning.equals("up") && p.xpos == tempPosX && p.ypos < tempPosY) {
-                fields[p.getXpos()][p.getYpos()].setGraphic(new ImageView(image_floor));
-                p.setXpos(nyX);
-                p.setYpos(nyY);
-                DataOutputStream outputStream = new DataOutputStream(serverSocket.getOutputStream());
-                outputStream.writeBytes(p.name + "/" + nyX + "/" + nyY + "/0/0/down/" + "\n");
-                System.out.printf("%s skydet", p.name);
+                randomSpawn(p,nyX,nyY);
             } else if (p != me && retning.equals("right") && p.xpos > tempPosX && p.ypos == tempPosY) {
-                fields[p.getXpos()][p.getYpos()].setGraphic(new ImageView(image_floor));
-                p.setXpos(nyX);
-                p.setYpos(nyY);
-                DataOutputStream outputStream = new DataOutputStream(serverSocket.getOutputStream());
-                outputStream.writeBytes(p.name + "/" + nyX + "/" + nyY + "/0/0/down/" + "\n");
-                System.out.printf("%s skydet", p.name);
+                randomSpawn(p,nyX,nyY);
             } else if (p != me && retning.equals("down") && p.xpos == tempPosX && p.ypos > tempPosY) {
-                fields[p.getXpos()][p.getYpos()].setGraphic(new ImageView(image_floor));
-                p.setXpos(nyX);
-                p.setYpos(nyY);
-                DataOutputStream outputStream = new DataOutputStream(serverSocket.getOutputStream());
-                outputStream.writeBytes(p.name + "/" + nyX + "/" + nyY + "/0/0/down/" + "\n");
-                System.out.printf("%s skydet", p.name);
+                randomSpawn(p,nyX,nyY);
             } else if (p != me && retning.equals("left") && p.xpos > tempPosX && p.ypos == tempPosY) {
-                fields[p.getXpos()][p.getYpos()].setGraphic(new ImageView(image_floor));
-                p.setXpos(nyX);
-                p.setYpos(nyY);
-                DataOutputStream outputStream = new DataOutputStream(serverSocket.getOutputStream());
-                outputStream.writeBytes(p.name + "/" + nyX + "/" + nyY + "/0/0/down/" + "\n");
-                System.out.printf("%s skydet", p.name);
+                randomSpawn(p,nyX,nyY);
             }
         }
     }
@@ -324,9 +304,9 @@ public class GUI extends Application {
         return null;
     }
 
-    public void movePleyers(int xX, int yY, String str, int deltaX, int deltaY, String direktion) {
+    public void movePleyers(int xX, int yY, String navn, int deltaX, int deltaY, String direktion) {
         for (Player p : players) {
-            if (p.name.equals(str)) {
+            if (p.name.equals(navn)) {
                 playerMoved(xX, yY, deltaX, deltaY, direktion, p);
             }
         }
@@ -353,4 +333,51 @@ public class GUI extends Application {
     public int getAntalPlayers(){
         return players.size();
     }
+
+    /**
+     * @param p player som står i den retning hvor man skyder
+     * @param nyXPos dens ny x position på brettet
+     * @param nyYPos dens ny y position på brettet
+     * @throws IOException
+     */
+
+    private void randomSpawn(Player p, int nyXPos,int nyYPos) throws IOException{
+//        if(board[nyXPos].charAt(nyYPos)!='w') { //skal sikre at væggerne bliver ikke fjernet
+//            fields[p.getXpos()][p.getYpos()].setGraphic(new ImageView(image_floor));
+//        }
+        //--------------------
+        try {
+            repaint();//skal reset
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //--------------------
+        p.setXpos(nyXPos);
+        p.setYpos(nyYPos);
+        DataOutputStream outputStream = new DataOutputStream(serverSocket.getOutputStream());
+        outputStream.writeBytes(p.name + "/" + nyXPos + "/" + nyYPos + "/0/0/down/" + "\n");
+        System.out.printf("%s skydet", p.name);
+    }
+
+    private void repaint() throws Exception {
+        for (int j = 0; j < 20; j++) {
+            for (int i = 0; i < 20; i++) {
+                switch (board[j].charAt(i)) {
+                    case 'w':
+                        fields[i][j].setGraphic(new ImageView(image_wall));
+                        break;
+                    case ' ':
+                        fields[i][j].setGraphic(new ImageView(image_floor));
+                        break;
+                    default:
+                        throw new Exception("Illegal field value: " + board[j].charAt(i));
+                }
+            }
+        }
+    }
 }
+/**
+ * tråd skal ikke synchrinoseres
+ * men metoder som den tilgå skal
+ * move skulle være synchroniseret sammen med points beregning
+ */
