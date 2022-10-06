@@ -37,10 +37,10 @@ public class ChangeThread extends Thread {
         }
     }
 
-    private boolean findPlayer(String str) {
+    private boolean findPlayer(String navn) {
 
         for (Player p : gui.getPlayers()) {
-            if (p.name.equals(str)) {
+            if (p.name.equals(navn)) {
                 return true; //break;
             }
         }
@@ -48,24 +48,19 @@ public class ChangeThread extends Thread {
     }
 
     private void gennemgang(String message) {
-        try {
-            message = bufferedReader.readLine();
-            String[] stringSplittet = message.split("/");
-            Platform.runLater(() -> {
-                if (gui.getAntalPlayers() < 3 && !findPlayer(stringSplittet[0]) && stringSplittet[0].trim().length() > 0) {//new player som er lige joinet oprettes
-                    try {
-                        gui.opretPlayer(stringSplittet[0], Integer.parseInt(stringSplittet[1]), Integer.parseInt(stringSplittet[2]), "up");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+        String[] stringSplittet = message.split("/");
+        Platform.runLater(() -> {
+            if (gui.getAntalPlayers() < TCPServer.getSockets().size() && !findPlayer(stringSplittet[0]) && stringSplittet[0].trim().length() > 0) {//new player som er lige joinet oprettes
+                try {
+                    gui.opretPlayer(stringSplittet[0], Integer.parseInt(stringSplittet[1]), Integer.parseInt(stringSplittet[2]), "up");
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                System.out.println(Arrays.toString(stringSplittet));
-                gui.movePleyers(Integer.parseInt(stringSplittet[1]), Integer.parseInt(stringSplittet[2]),
-                        stringSplittet[0], Integer.parseInt(stringSplittet[3]), Integer.parseInt(stringSplittet[4]), stringSplittet[5]);
-                /** posX,posY,navn,n,n,direktion */
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            }
+            System.out.println(Arrays.toString(stringSplittet));
+            gui.movePleyers(Integer.parseInt(stringSplittet[1]), Integer.parseInt(stringSplittet[2]),
+                    stringSplittet[0], Integer.parseInt(stringSplittet[3]), Integer.parseInt(stringSplittet[4]), stringSplittet[5]);
+            /** posX,posY,navn,n,n,direktion */
+        });
     }
 }

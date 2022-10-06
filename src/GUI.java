@@ -31,7 +31,7 @@ public class GUI extends Application {
     public static Image image_wall;
     public static Image hero_right, hero_left, hero_up, hero_down;
     private int id;
-
+    private DataOutputStream outputStream;
     public static Player me;
     public static List<Player> players = new ArrayList<Player>();
     private Socket serverSocket;
@@ -89,8 +89,8 @@ public class GUI extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            serverSocket = new Socket("10.10.139.56", 6789);//"10.10.139.128" 192.168.2.82
-            DataOutputStream outputStream = new DataOutputStream(serverSocket.getOutputStream());
+            serverSocket = new Socket("192.168.2.82", 6789);
+             outputStream = new DataOutputStream(serverSocket.getOutputStream());
 
             ChangeThread changeThread = new ChangeThread(serverSocket, this);
             changeThread.start();
@@ -342,42 +342,14 @@ public class GUI extends Application {
      */
 
     private void randomSpawn(Player p, int nyXPos,int nyYPos) throws IOException{
-//        if(board[nyXPos].charAt(nyYPos)!='w') { //skal sikre at væggerne bliver ikke fjernet
-//            fields[p.getXpos()][p.getYpos()].setGraphic(new ImageView(image_floor));
-//        }
-        //--------------------
-        try {
-            repaint();//skal reset
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(board[nyXPos].charAt(nyYPos)!='w') { //skal sikre at væggerne bliver ikke fjernet
+            fields[p.getXpos()][p.getYpos()].setGraphic(new ImageView(image_floor));
         }
-        //--------------------
         p.setXpos(nyXPos);
         p.setYpos(nyYPos);
-        DataOutputStream outputStream = new DataOutputStream(serverSocket.getOutputStream());
-        outputStream.writeBytes(p.name + "/" + nyXPos + "/" + nyYPos + "/0/0/down/" + "\n");
+        outputStream.writeBytes(p.name + "/" + nyXPos + "/" + nyYPos + "/0/+1/down/" + "\n");
         System.out.printf("%s skydet", p.name);
     }
 
-    private void repaint() throws Exception {
-        for (int j = 0; j < 20; j++) {
-            for (int i = 0; i < 20; i++) {
-                switch (board[j].charAt(i)) {
-                    case 'w':
-                        fields[i][j].setGraphic(new ImageView(image_wall));
-                        break;
-                    case ' ':
-                        fields[i][j].setGraphic(new ImageView(image_floor));
-                        break;
-                    default:
-                        throw new Exception("Illegal field value: " + board[j].charAt(i));
-                }
-            }
-        }
-    }
+
 }
-/**
- * tråd skal ikke synchrinoseres
- * men metoder som den tilgå skal
- * move skulle være synchroniseret sammen med points beregning
- */
