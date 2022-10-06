@@ -89,7 +89,7 @@ public class GUI extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            serverSocket = new Socket("localhost", 6789);
+            serverSocket = new Socket("192.168.2.82", 6789);
              outputStream = new DataOutputStream(serverSocket.getOutputStream());
 
             ChangeThread changeThread = new ChangeThread(serverSocket, this);

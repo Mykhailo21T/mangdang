@@ -3,7 +3,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class TCPServer {
-    private static ArrayList<Socket> connectionsockets = new ArrayList<>();
+    private static ArrayList<Socket> connectionsockets ;
     private static ServerSocket welcomSocket;
 
     public static void main(String[] args) throws Exception {
@@ -17,6 +17,6 @@ public class TCPServer {
     }
 
     public synchronized static ArrayList<Socket> getSockets() {
-        return new ArrayList<>(connectionsockets);
+        return connectionsockets;
     }
 }
