@@ -50,7 +50,7 @@ public class ChangeThread extends Thread {
     private void gennemgang(String message) {
         String[] stringSplittet = message.split("/");
         Platform.runLater(() -> {
-            if (gui.getAntalPlayers() < TCPServer.getSockets().size() && !findPlayer(stringSplittet[0]) && stringSplittet[0].trim().length() > 0) {//new player som er lige joinet oprettes
+            if (gui.getAntalPlayers() <= TCPServer.getSockets().size() && !findPlayer(stringSplittet[0]) && stringSplittet[0].trim().length() > 0) {//new player som er lige joinet oprettes
                 try {
                     gui.opretPlayer(stringSplittet[0], Integer.parseInt(stringSplittet[1]), Integer.parseInt(stringSplittet[2]), "up");
                 } catch (IOException e) {
